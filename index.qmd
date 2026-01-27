@@ -6,3 +6,12 @@ These are my personal notes on deep learning, starting from loss functions
 and probabilistic modeling.  
 The goal is understanding assumptions and reasoning, not coverage.
 
+---
+
+## Writing & Quarto References
+
+While writing these notes, I frequently refer to the following Quarto documentation:
+
+- [Quarto Markdown Basics](https://quarto.org/docs/authoring/markdown-basics.html)
+- [Quarto Callouts (Notes, Warnings, Tips, etc.)](https://quarto.org/docs/authoring/callouts.html)
+
