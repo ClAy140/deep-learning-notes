@@ -255,6 +255,19 @@ $$
 Hidden units learn features that are useful for all outputs,
 while each output learns its own linear combination.
 
+::: {.callout-note}
+在 2D 输入、多个输出的情况下，
+hidden units 先共同把 input space 划分成若干区域（由 ReLU 决定）。
+
+在每一个区域内，
+不同输出只是对同一组 hidden units 采用不同的线性组合，
+因此：
+
+- 各个输出共享相同的“拐点位置”
+- 但在每个区域内的函数形状可以不同
+:::
+
+
 ***
 
 ## Multiple Inputs
@@ -273,7 +286,32 @@ Geometrically:
 
 The computation pattern remains unchanged.
 
-***
+::: {.callout-note}
+**Parameter count for a 1-hidden-layer network**
+
+For a neural network with **one hidden layer**:
+
+$$
+\text{Parameters}
+= (d \times H + H) + (H \times K + K)
+$$
+
+where:
+- $d$: number of inputs  
+- $H$: number of hidden units  
+- $K$: number of outputs  
+
+**Example**
+
+For $d = 3$, $H = 3$, $K = 2$:
+
+$$
+(3 \cdot 3 + 3) + (3 \cdot 2 + 2) = 12 + 8 = 20
+$$
+
+So the network has **20 parameters** in total.
+:::
+
 
 ## Takeaway
 
