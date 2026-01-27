@@ -4,3 +4,6 @@ _site/
 
 # OS junk
 .DS_Store
+
+/.quarto/
+**/*.quarto_ipynb

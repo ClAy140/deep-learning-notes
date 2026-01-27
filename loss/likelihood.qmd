@@ -16,3 +16,4 @@ This means the joint probability factors into a product.
 
 Taking the negative log-likelihood converts likelihood into a loss
 that can be minimized during training.
+
