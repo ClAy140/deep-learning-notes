@@ -1,0 +1,8 @@
+---
+title: "Deep Learning Notes"
+---
+
+These are my personal notes on deep learning, starting from loss functions
+and probabilistic modeling.  
+The goal is understanding assumptions and reasoning, not coverage.
+

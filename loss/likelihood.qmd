@@ -1,0 +1,18 @@
+---
+title: "Likelihood and Model Quality"
+---
+
+## What problem does likelihood solve?
+
+Likelihood measures how well a model with fixed parameters explains
+the observed data.
+
+## Why is it a product over data points?
+
+Because we assume data points are independent.
+This means the joint probability factors into a product.
+
+## Why does this relate to loss functions?
+
+Taking the negative log-likelihood converts likelihood into a loss
+that can be minimized during training.

@@ -1,0 +1,17 @@
+{
+  "index.qmd": {
+    "index.html": "d245e8b1"
+  },
+  "about.qmd": {
+    "about.html": "dd175002"
+  },
+  "loss/likelihood.qmd": {
+    "likelihood.html": "e617b1b0"
+  },
+  "loss/mle-to-nll.qmd": {
+    "mle-to-nll.html": "9e840b63"
+  },
+  "loss/gaussian-to-mse.qmd": {
+    "gaussian-to-mse.html": "00fdd4d0"
+  }
+}
