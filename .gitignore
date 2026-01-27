@@ -1,0 +1,6 @@
+# Quarto generated files
+_site/
+.quarto/
+
+# OS junk
+.DS_Store
