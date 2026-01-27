@@ -157,17 +157,11 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../loss/mle-to-nll.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">mle-to-nll.html</span></a>
-  </div>
-</li>
+ <span class="menu-text">loss/mle-to-nll.qmd</span>
+  </li>
           <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../loss/gaussian-to-mse.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">gaussian-to-mse.html</span></a>
-  </div>
-</li>
+ <span class="menu-text">loss/gaussian-to-mse.qmd</span>
+  </li>
       </ul>
   </li>
     </ul>
@@ -288,7 +282,7 @@ window.Quarto = {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/ClAy140\.github\.io\/deep-learning-notes\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
