@@ -110,7 +110,7 @@
     "href": "neural-networks/understanding-neural-networks.html#multiple-outputs",
     "title": "Neural Networks Are Not Black Boxes",
     "section": "Multiple Outputs",
-    "text": "Multiple Outputs\nFor multiple outputs, hidden units are shared:\n\\[\n\\begin{aligned}\ny_1 &= \\phi_{10} + \\sum_i \\phi_{1i} h_i \\\\\ny_2 &= \\phi_{20} + \\sum_i \\phi_{2i} h_i\n\\end{aligned}\n\\]\nHidden units learn features that are useful for all outputs, while each output learns its own linear combination.",
+    "text": "Multiple Outputs\nFor multiple outputs, hidden units are shared:\n\\[\n\\begin{aligned}\ny_1 &= \\phi_{10} + \\sum_i \\phi_{1i} h_i \\\\\ny_2 &= \\phi_{20} + \\sum_i \\phi_{2i} h_i\n\\end{aligned}\n\\]\nHidden units learn features that are useful for all outputs, while each output learns its own linear combination.\n\n\n\n\n\n\nNote\n\n\n\n在 2D 输入、多个输出的情况下， hidden units 先共同把 input space 划分成若干区域（由 ReLU 决定）。\n在每一个区域内， 不同输出只是对同一组 hidden units 采用不同的线性组合， 因此：\n\n各个输出共享相同的“拐点位置”\n但在每个区域内的函数形状可以不同",
     "crumbs": [
       "Neural Networks",
       "Neural Networks Are Not Black Boxes"
@@ -121,7 +121,7 @@
     "href": "neural-networks/understanding-neural-networks.html#multiple-inputs",
     "title": "Neural Networks Are Not Black Boxes",
     "section": "Multiple Inputs",
-    "text": "Multiple Inputs\nWith multivariate inputs, each hidden unit computes\n\\[\nh_i(x) = a(\\theta_{i0} + \\theta_{i1} x_1 + \\theta_{i2} x_2 + \\cdots)\n\\]\nGeometrically:\n\neach hidden unit defines a hyperplane\nactivation functions partition input space into regions\nthe output is piecewise linear within each region\n\nThe computation pattern remains unchanged.",
+    "text": "Multiple Inputs\nWith multivariate inputs, each hidden unit computes\n\\[\nh_i(x) = a(\\theta_{i0} + \\theta_{i1} x_1 + \\theta_{i2} x_2 + \\cdots)\n\\]\nGeometrically:\n\neach hidden unit defines a hyperplane\nactivation functions partition input space into regions\nthe output is piecewise linear within each region\n\nThe computation pattern remains unchanged.\n\n\n\n\n\n\nNote\n\n\n\nParameter count for a 1-hidden-layer network\nFor a neural network with one hidden layer:\n\\[\n\\text{Parameters}\n= (d \\times H + H) + (H \\times K + K)\n\\]\nwhere: - \\(d\\): number of inputs\n- \\(H\\): number of hidden units\n- \\(K\\): number of outputs\nExample\nFor \\(d = 3\\), \\(H = 3\\), \\(K = 2\\):\n\\[\n(3 \\cdot 3 + 3) + (3 \\cdot 2 + 2) = 12 + 8 = 20\n\\]\nSo the network has 20 parameters in total.",
     "crumbs": [
       "Neural Networks",
       "Neural Networks Are Not Black Boxes"
@@ -231,6 +231,16 @@
     "title": "Deep Learning Notes",
     "section": "Writing & Quarto References",
     "text": "Writing & Quarto References\nWhile writing these notes, I frequently refer to the following Quarto documentation:\n\nQuarto Markdown Basics\nQuarto Callouts (Notes, Warnings, Tips, etc.)",
+    "crumbs": [
+      "Deep Learning Notes"
+    ]
+  },
+  {
+    "objectID": "index.html#project-links-publishing",
+    "href": "index.html#project-links-publishing",
+    "title": "Deep Learning Notes",
+    "section": "Project Links & Publishing",
+    "text": "Project Links & Publishing\n\nLive Site\nThis site is publicly available at:\n\nwebsite\n\n\n\n\nPublish Command (Quarto → GitHub Pages)\nTo render and publish the site to GitHub Pages:\nquarto publish gh-pages",
     "crumbs": [
       "Deep Learning Notes"
     ]

@@ -388,7 +388,7 @@ h(x) = a(\theta_0 + \theta_1 x)
 <li>different linear functions apply in different regions</li>
 <li>the overall function becomes <strong>piecewise linear</strong></li>
 </ul>
-<div id="0a5f128a" class="cell" data-execution_count="1">
+<div id="70be0cd7" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Show code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -453,6 +453,24 @@ y_2 &amp;= \phi_{20} + \sum_i \phi_{2i} h_i
 \end{aligned}
 \]</span></p>
 <p>Hidden units learn features that are useful for all outputs, while each output learns its own linear combination.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>在 2D 输入、多个输出的情况下， hidden units 先共同把 input space 划分成若干区域（由 ReLU 决定）。</p>
+<p>在每一个区域内， 不同输出只是对同一组 hidden units 采用不同的线性组合， 因此：</p>
+<ul>
+<li>各个输出共享相同的“拐点位置”</li>
+<li>但在每个区域内的函数形状可以不同</li>
+</ul>
+</div>
+</div>
 <hr>
 </section>
 <section id="multiple-inputs" class="level2">
@@ -468,7 +486,33 @@ h_i(x) = a(\theta_{i0} + \theta_{i1} x_1 + \theta_{i2} x_2 + \cdots)
 <li>the output is piecewise linear within each region</li>
 </ul>
 <p>The computation pattern remains unchanged.</p>
-<hr>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Parameter count for a 1-hidden-layer network</strong></p>
+<p>For a neural network with <strong>one hidden layer</strong>:</p>
+<p><span class="math display">\[
+\text{Parameters}
+= (d \times H + H) + (H \times K + K)
+\]</span></p>
+<p>where: - <span class="math inline">\(d\)</span>: number of inputs<br>
+- <span class="math inline">\(H\)</span>: number of hidden units<br>
+- <span class="math inline">\(K\)</span>: number of outputs</p>
+<p><strong>Example</strong></p>
+<p>For <span class="math inline">\(d = 3\)</span>, <span class="math inline">\(H = 3\)</span>, <span class="math inline">\(K = 2\)</span>:</p>
+<p><span class="math display">\[
+(3 \cdot 3 + 3) + (3 \cdot 2 + 2) = 12 + 8 = 20
+\]</span></p>
+<p>So the network has <strong>20 parameters</strong> in total.</p>
+</div>
+</div>
 </section>
 <section id="takeaway" class="level2">
 <h2 class="anchored" data-anchor-id="takeaway">Takeaway</h2>
