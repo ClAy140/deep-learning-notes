@@ -1,0 +1,283 @@
+---
+title: "Neural Networks Are Not Black Boxes"
+jupyter: python3
+format:
+  html:
+    code-fold: true
+    code-summary: "Show code"
+---
+
+## Motivation
+
+Neural networks are often described as **black boxes**. However, shallow neural networks can be understood precisely by decomposing them into simple **mathematical components**.
+
+The goal of this note is to show that a neural network is a structured composition of **linear functions and activation functions**, rather than a mysterious nonlinear system.
+
+::: {.callout-note}
+神经网络并不是一个真正的 black box， 而是由 linear function 和 activation function 组成的可分析计算结构。
+
+:::
+
+
+## What “Shallow” Means (Precisely)
+
+A **shallow neural network** is defined by its depth, not by its simplicity.
+
+It has:
+
+- **one hidden layer**
+- a single composition of  **linear → activation → linear**
+
+Formally, the computation has the structure
+
+$$
+x \;\longrightarrow\; \text{linear} \;\longrightarrow\; \text{activation} \;\longrightarrow\; \text{linear} \;\longrightarrow\; y
+$$
+
+Equivalently, this can be written as
+
+$$
+h^{(1)} = a(W^{(1)}x + b^{(1)}), \qquad
+y = W^{(2)} h^{(1)} + b^{(2)}.
+$$
+
+This is **one hidden layer**.
+
+
+A **deep neural network** simply stacks this same pattern multiple times:
+
+$$
+x \;\longrightarrow\; (\text{linear} + \text{activation})^{L} \;\longrightarrow\; y
+$$
+
+Formally, a deep network is defined by
+
+$$
+\begin{aligned}
+h^{(1)} &= a(W^{(1)}x + b^{(1)}) \\
+h^{(2)} &= a(W^{(2)}h^{(1)} + b^{(2)}) \\
+h^{(3)} &= a(W^{(3)}h^{(2)} + b^{(3)}) \\
+&\;\vdots \\
+y &= W^{(L+1)}h^{(L)} + b^{(L+1)}.
+\end{aligned}
+$$
+
+
+The basic building blocks are identical.
+Depth only increases how many times the pattern is composed.
+
+::: {.callout-note}
+**Shallow**和 **Deep**的区别，本质上在于 hidden layer 有几层。 只有一层的就是shallow，有多层重复堆叠的是deep
+
+:::
+
+
+
+## A Concrete Example of a Shallow Neural Network
+
+A shallow neural network can be understood as a function
+that maps inputs to outputs, with its behavior controlled by a set of parameters:
+
+$$
+y = f(x; \phi)
+$$
+
+Rather than working with an abstract definition, we begin with
+a simple example that illustrates how this function is constructed.
+
+Consider a network that takes a single scalar input $x$ 
+and produces a scalar output $y$.
+The output can be written as
+
+$$
+y
+= \phi_0
++ \phi_1 a(\theta_{10} + \theta_{11} x)
++ \phi_2 a(\theta_{20} + \theta_{21} x)
++ \phi_3 a(\theta_{30} + \theta_{31} x).
+$$
+
+This expression reveals the internal structure of the network.
+The computation proceeds in three steps:
+
+1. **Linear responses**  
+   The input $x$ is passed through several linear functions.
+
+2. **Activation**  
+   Each linear response is transformed by an activation function  $a(\cdot)$.
+
+3. **Aggregation**  
+   The activated responses are **weighted, summed, and shifted**
+   to produce the final output.
+
+To complete the specification of the model, we must choose
+an activation function.
+In this chapter, we focus on the **rectified linear unit (ReLU)**,
+defined as
+
+$$
+a(z) = \text{ReLU}(z) =
+\begin{cases}
+0, & z < 0 \\
+z, & z \ge 0
+\end{cases}
+$$
+
+The ReLU function passes positive values unchanged
+while suppressing negative values.
+As a result, each hidden unit contributes to the output
+only in certain regions of the input space.
+
+::: {.callout-note}
+因为 activation function（这里是 ReLU）是套在 linear function 外面的，  
+比如  
+$$
+h(x) = \text{ReLU}(\theta_0 + \theta_1 x),
+$$
+只有当内层的 linear function 大于 0 时，这个 hidden unit 才会“被激活”。
+
+当 ReLU 输出为 0 时，这个 hidden unit 对最终输出 $y$ **没有贡献**；  
+只有在满足条件的输入区间内，它才参与到输出中。
+
+所以说：**每个 hidden unit 只在 input space 的某些区域起作用。**
+
+:::
+
+## A Single Hidden Unit
+
+A hidden unit computes
+
+$$
+h(x) = a(\theta_0 + \theta_1 x)
+$$
+
+where a linear function is followed by an activation function.
+
+This means that a hidden unit is not a neuron,
+but a **gated linear function**.
+
+
+## Why Activation Functions Matter
+
+Without activation functions, a neural network reduces to a linear model.
+
+$$
+\sum_i (\alpha_i x + \beta_i) = Ax + B
+$$
+
+No matter how many layers or units we use,
+the model remains linear.
+
+Activation functions break this collapse by introducing
+nonlinear gating behavior.
+
+Crucially, this gating determines **where** a linear function contributes
+in the input space.
+
+## ReLU and Piecewise Linear Functions
+
+Using ReLU as the activation function,
+
+$$
+\text{ReLU}(z) = \max(0, z),
+$$
+
+each hidden unit is active only in part of the input space.
+
+As a result:
+
+- different linear functions apply in different regions
+- the overall function becomes **piecewise linear**
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.linspace(-5, 5, 400)
+y = np.maximum(0, x)
+
+plt.plot(x, y)
+plt.title("ReLU")
+plt.show()
+```
+
+## Combining Multiple Hidden Units
+
+Once each hidden unit is active only in a limited region,
+combining multiple hidden units allows the model
+to cover many regions of the input space.
+
+A shallow neural network produces output
+
+$$
+y = \phi_0 + \sum_{i=1}^H \phi_i h_i(x)
+$$
+
+Each hidden unit acts as a local expert,
+and the output is a weighted sum of these experts.
+
+This shows that neural networks construct complex functions
+by combining simple local behaviors.
+
+
+
+
+## Expressive Power and Approximation
+
+As the number of hidden units increases:
+
+- the number of linear regions increases
+- the function becomes more flexible
+
+With enough hidden units,
+a shallow neural network can approximate any continuous function
+on a compact domain.
+
+This is the intuition behind universal approximation.
+
+::: {.callout-note}
+hidden units 越多，
+整体函数就可以在更多区间内调整形状，
+从而更精细地逼近真实的目标函数。
+:::
+
+## Multiple Outputs
+
+For multiple outputs, hidden units are shared:
+
+$$
+\begin{aligned}
+y_1 &= \phi_{10} + \sum_i \phi_{1i} h_i \\
+y_2 &= \phi_{20} + \sum_i \phi_{2i} h_i
+\end{aligned}
+$$
+
+Hidden units learn features that are useful for all outputs,
+while each output learns its own linear combination.
+
+***
+
+## Multiple Inputs
+
+With multivariate inputs, each hidden unit computes
+
+$$
+h_i(x) = a(\theta_{i0} + \theta_{i1} x_1 + \theta_{i2} x_2 + \cdots)
+$$
+
+Geometrically:
+
+- each hidden unit defines a hyperplane
+- activation functions partition input space into regions
+- the output is piecewise linear within each region
+
+The computation pattern remains unchanged.
+
+***
+
+## Takeaway
+
+Neural networks are not black boxes.
+They are sums of gated linear functions,
+where activation functions determine
+*where* each linear component applies.

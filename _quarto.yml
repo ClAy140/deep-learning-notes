@@ -11,10 +11,12 @@ website:
       - section: "Loss Functions"
         contents:
           - loss/likelihood.qmd
-          - loss/mle-to-nll.qmd
-          - loss/gaussian-to-mse.qmd
+      - section: "Neural Networks"
+        contents:
+          - neural-networks/understanding-neural-networks.qmd
 
 format:
   html:
     theme: cosmo
     math: mathjax
+    # css: styles.css
