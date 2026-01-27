@@ -7,11 +7,154 @@
     "text": "About this site"
   },
   {
+    "objectID": "neural-networks/understanding-neural-networks.html",
+    "href": "neural-networks/understanding-neural-networks.html",
+    "title": "Neural Networks Are Not Black Boxes",
+    "section": "",
+    "text": "Neural networks are often described as black boxes. However, shallow neural networks can be understood precisely by decomposing them into simple mathematical components.\nThe goal of this note is to show that a neural network is a structured composition of linear functions and activation functions, rather than a mysterious nonlinear system.\n\n\n\n\n\n\nNote\n\n\n\n神经网络并不是一个真正的 black box， 而是由 linear function 和 activation function 组成的可分析计算结构。",
+    "crumbs": [
+      "Neural Networks",
+      "Neural Networks Are Not Black Boxes"
+    ]
+  },
+  {
+    "objectID": "neural-networks/understanding-neural-networks.html#motivation",
+    "href": "neural-networks/understanding-neural-networks.html#motivation",
+    "title": "Neural Networks Are Not Black Boxes",
+    "section": "",
+    "text": "Neural networks are often described as black boxes. However, shallow neural networks can be understood precisely by decomposing them into simple mathematical components.\nThe goal of this note is to show that a neural network is a structured composition of linear functions and activation functions, rather than a mysterious nonlinear system.\n\n\n\n\n\n\nNote\n\n\n\n神经网络并不是一个真正的 black box， 而是由 linear function 和 activation function 组成的可分析计算结构。",
+    "crumbs": [
+      "Neural Networks",
+      "Neural Networks Are Not Black Boxes"
+    ]
+  },
+  {
+    "objectID": "neural-networks/understanding-neural-networks.html#what-shallow-means-precisely",
+    "href": "neural-networks/understanding-neural-networks.html#what-shallow-means-precisely",
+    "title": "Neural Networks Are Not Black Boxes",
+    "section": "What “Shallow” Means (Precisely)",
+    "text": "What “Shallow” Means (Precisely)\nA shallow neural network is defined by its depth, not by its simplicity.\nIt has:\n\none hidden layer\na single composition of linear → activation → linear\n\nFormally, the computation has the structure\n\\[\nx \\;\\longrightarrow\\; \\text{linear} \\;\\longrightarrow\\; \\text{activation} \\;\\longrightarrow\\; \\text{linear} \\;\\longrightarrow\\; y\n\\]\nEquivalently, this can be written as\n\\[\nh^{(1)} = a(W^{(1)}x + b^{(1)}), \\qquad\ny = W^{(2)} h^{(1)} + b^{(2)}.\n\\]\nThis is one hidden layer.\nA deep neural network simply stacks this same pattern multiple times:\n\\[\nx \\;\\longrightarrow\\; (\\text{linear} + \\text{activation})^{L} \\;\\longrightarrow\\; y\n\\]\nFormally, a deep network is defined by\n\\[\n\\begin{aligned}\nh^{(1)} &= a(W^{(1)}x + b^{(1)}) \\\\\nh^{(2)} &= a(W^{(2)}h^{(1)} + b^{(2)}) \\\\\nh^{(3)} &= a(W^{(3)}h^{(2)} + b^{(3)}) \\\\\n&\\;\\vdots \\\\\ny &= W^{(L+1)}h^{(L)} + b^{(L+1)}.\n\\end{aligned}\n\\]\nThe basic building blocks are identical. Depth only increases how many times the pattern is composed.\n\n\n\n\n\n\nNote\n\n\n\nShallow和 Deep的区别，本质上在于 hidden layer 有几层。 只有一层的就是shallow，有多层重复堆叠的是deep",
+    "crumbs": [
+      "Neural Networks",
+      "Neural Networks Are Not Black Boxes"
+    ]
+  },
+  {
+    "objectID": "neural-networks/understanding-neural-networks.html#a-concrete-example-of-a-shallow-neural-network",
+    "href": "neural-networks/understanding-neural-networks.html#a-concrete-example-of-a-shallow-neural-network",
+    "title": "Neural Networks Are Not Black Boxes",
+    "section": "A Concrete Example of a Shallow Neural Network",
+    "text": "A Concrete Example of a Shallow Neural Network\nA shallow neural network can be understood as a function that maps inputs to outputs, with its behavior controlled by a set of parameters:\n\\[\ny = f(x; \\phi)\n\\]\nRather than working with an abstract definition, we begin with a simple example that illustrates how this function is constructed.\nConsider a network that takes a single scalar input \\(x\\) and produces a scalar output \\(y\\). The output can be written as\n\\[\ny\n= \\phi_0\n+ \\phi_1 a(\\theta_{10} + \\theta_{11} x)\n+ \\phi_2 a(\\theta_{20} + \\theta_{21} x)\n+ \\phi_3 a(\\theta_{30} + \\theta_{31} x).\n\\]\nThis expression reveals the internal structure of the network. The computation proceeds in three steps:\n\nLinear responses\nThe input \\(x\\) is passed through several linear functions.\nActivation\nEach linear response is transformed by an activation function \\(a(\\cdot)\\).\nAggregation\nThe activated responses are weighted, summed, and shifted to produce the final output.\n\nTo complete the specification of the model, we must choose an activation function. In this chapter, we focus on the rectified linear unit (ReLU), defined as\n\\[\na(z) = \\text{ReLU}(z) =\n\\begin{cases}\n0, & z &lt; 0 \\\\\nz, & z \\ge 0\n\\end{cases}\n\\]\nThe ReLU function passes positive values unchanged while suppressing negative values. As a result, each hidden unit contributes to the output only in certain regions of the input space.\n\n\n\n\n\n\nNote\n\n\n\n因为 activation function（这里是 ReLU）是套在 linear function 外面的，\n比如\n\\[\nh(x) = \\text{ReLU}(\\theta_0 + \\theta_1 x),\n\\] 只有当内层的 linear function 大于 0 时，这个 hidden unit 才会“被激活”。\n当 ReLU 输出为 0 时，这个 hidden unit 对最终输出 \\(y\\) 没有贡献；\n只有在满足条件的输入区间内，它才参与到输出中。\n所以说：每个 hidden unit 只在 input space 的某些区域起作用。",
+    "crumbs": [
+      "Neural Networks",
+      "Neural Networks Are Not Black Boxes"
+    ]
+  },
+  {
+    "objectID": "neural-networks/understanding-neural-networks.html#a-single-hidden-unit",
+    "href": "neural-networks/understanding-neural-networks.html#a-single-hidden-unit",
+    "title": "Neural Networks Are Not Black Boxes",
+    "section": "A Single Hidden Unit",
+    "text": "A Single Hidden Unit\nA hidden unit computes\n\\[\nh(x) = a(\\theta_0 + \\theta_1 x)\n\\]\nwhere a linear function is followed by an activation function.\nThis means that a hidden unit is not a neuron, but a gated linear function.",
+    "crumbs": [
+      "Neural Networks",
+      "Neural Networks Are Not Black Boxes"
+    ]
+  },
+  {
+    "objectID": "neural-networks/understanding-neural-networks.html#why-activation-functions-matter",
+    "href": "neural-networks/understanding-neural-networks.html#why-activation-functions-matter",
+    "title": "Neural Networks Are Not Black Boxes",
+    "section": "Why Activation Functions Matter",
+    "text": "Why Activation Functions Matter\nWithout activation functions, a neural network reduces to a linear model.\n\\[\n\\sum_i (\\alpha_i x + \\beta_i) = Ax + B\n\\]\nNo matter how many layers or units we use, the model remains linear.\nActivation functions break this collapse by introducing nonlinear gating behavior.\nCrucially, this gating determines where a linear function contributes in the input space.",
+    "crumbs": [
+      "Neural Networks",
+      "Neural Networks Are Not Black Boxes"
+    ]
+  },
+  {
+    "objectID": "neural-networks/understanding-neural-networks.html#relu-and-piecewise-linear-functions",
+    "href": "neural-networks/understanding-neural-networks.html#relu-and-piecewise-linear-functions",
+    "title": "Neural Networks Are Not Black Boxes",
+    "section": "ReLU and Piecewise Linear Functions",
+    "text": "ReLU and Piecewise Linear Functions\nUsing ReLU as the activation function,\n\\[\n\\text{ReLU}(z) = \\max(0, z),\n\\]\neach hidden unit is active only in part of the input space.\nAs a result:\n\ndifferent linear functions apply in different regions\nthe overall function becomes piecewise linear\n\n\n\nShow code\nimport numpy as np\nimport matplotlib.pyplot as plt\n\nx = np.linspace(-5, 5, 400)\ny = np.maximum(0, x)\n\nplt.plot(x, y)\nplt.title(\"ReLU\")\nplt.show()",
+    "crumbs": [
+      "Neural Networks",
+      "Neural Networks Are Not Black Boxes"
+    ]
+  },
+  {
+    "objectID": "neural-networks/understanding-neural-networks.html#combining-multiple-hidden-units",
+    "href": "neural-networks/understanding-neural-networks.html#combining-multiple-hidden-units",
+    "title": "Neural Networks Are Not Black Boxes",
+    "section": "Combining Multiple Hidden Units",
+    "text": "Combining Multiple Hidden Units\nOnce each hidden unit is active only in a limited region, combining multiple hidden units allows the model to cover many regions of the input space.\nA shallow neural network produces output\n\\[\ny = \\phi_0 + \\sum_{i=1}^H \\phi_i h_i(x)\n\\]\nEach hidden unit acts as a local expert, and the output is a weighted sum of these experts.\nThis shows that neural networks construct complex functions by combining simple local behaviors.",
+    "crumbs": [
+      "Neural Networks",
+      "Neural Networks Are Not Black Boxes"
+    ]
+  },
+  {
+    "objectID": "neural-networks/understanding-neural-networks.html#expressive-power-and-approximation",
+    "href": "neural-networks/understanding-neural-networks.html#expressive-power-and-approximation",
+    "title": "Neural Networks Are Not Black Boxes",
+    "section": "Expressive Power and Approximation",
+    "text": "Expressive Power and Approximation\nAs the number of hidden units increases:\n\nthe number of linear regions increases\nthe function becomes more flexible\n\nWith enough hidden units, a shallow neural network can approximate any continuous function on a compact domain.\nThis is the intuition behind universal approximation.\n\n\n\n\n\n\nNote\n\n\n\nhidden units 越多， 整体函数就可以在更多区间内调整形状， 从而更精细地逼近真实的目标函数。",
+    "crumbs": [
+      "Neural Networks",
+      "Neural Networks Are Not Black Boxes"
+    ]
+  },
+  {
+    "objectID": "neural-networks/understanding-neural-networks.html#multiple-outputs",
+    "href": "neural-networks/understanding-neural-networks.html#multiple-outputs",
+    "title": "Neural Networks Are Not Black Boxes",
+    "section": "Multiple Outputs",
+    "text": "Multiple Outputs\nFor multiple outputs, hidden units are shared:\n\\[\n\\begin{aligned}\ny_1 &= \\phi_{10} + \\sum_i \\phi_{1i} h_i \\\\\ny_2 &= \\phi_{20} + \\sum_i \\phi_{2i} h_i\n\\end{aligned}\n\\]\nHidden units learn features that are useful for all outputs, while each output learns its own linear combination.",
+    "crumbs": [
+      "Neural Networks",
+      "Neural Networks Are Not Black Boxes"
+    ]
+  },
+  {
+    "objectID": "neural-networks/understanding-neural-networks.html#multiple-inputs",
+    "href": "neural-networks/understanding-neural-networks.html#multiple-inputs",
+    "title": "Neural Networks Are Not Black Boxes",
+    "section": "Multiple Inputs",
+    "text": "Multiple Inputs\nWith multivariate inputs, each hidden unit computes\n\\[\nh_i(x) = a(\\theta_{i0} + \\theta_{i1} x_1 + \\theta_{i2} x_2 + \\cdots)\n\\]\nGeometrically:\n\neach hidden unit defines a hyperplane\nactivation functions partition input space into regions\nthe output is piecewise linear within each region\n\nThe computation pattern remains unchanged.",
+    "crumbs": [
+      "Neural Networks",
+      "Neural Networks Are Not Black Boxes"
+    ]
+  },
+  {
+    "objectID": "neural-networks/understanding-neural-networks.html#takeaway",
+    "href": "neural-networks/understanding-neural-networks.html#takeaway",
+    "title": "Neural Networks Are Not Black Boxes",
+    "section": "Takeaway",
+    "text": "Takeaway\nNeural networks are not black boxes. They are sums of gated linear functions, where activation functions determine where each linear component applies.",
+    "crumbs": [
+      "Neural Networks",
+      "Neural Networks Are Not Black Boxes"
+    ]
+  },
+  {
     "objectID": "loss/likelihood.html",
     "href": "loss/likelihood.html",
     "title": "Likelihood and Model Quality",
     "section": "",
-    "text": "Likelihood measures how well a model with fixed parameters explains the observed data.",
+    "text": "When training neural networks, we always minimize a loss function. However, loss functions are often introduced as if they were arbitrary design choices.\nIn this note, we explain where loss functions come from by starting with a probabilistic view of model quality, based on likelihood.\nThis perspective will naturally lead us to negative log-likelihood and common loss functions such as least squares.",
+    "crumbs": [
+      "Loss Functions",
+      "Likelihood and Model Quality"
+    ]
+  },
+  {
+    "objectID": "loss/likelihood.html#motivation-why-do-we-need-loss-functions",
+    "href": "loss/likelihood.html#motivation-why-do-we-need-loss-functions",
+    "title": "Likelihood and Model Quality",
+    "section": "",
+    "text": "When training neural networks, we always minimize a loss function. However, loss functions are often introduced as if they were arbitrary design choices.\nIn this note, we explain where loss functions come from by starting with a probabilistic view of model quality, based on likelihood.\nThis perspective will naturally lead us to negative log-likelihood and common loss functions such as least squares.",
     "crumbs": [
       "Loss Functions",
       "Likelihood and Model Quality"
@@ -21,30 +164,52 @@
     "objectID": "loss/likelihood.html#what-problem-does-likelihood-solve",
     "href": "loss/likelihood.html#what-problem-does-likelihood-solve",
     "title": "Likelihood and Model Quality",
-    "section": "",
-    "text": "Likelihood measures how well a model with fixed parameters explains the observed data.",
+    "section": "What problem does likelihood solve?",
+    "text": "What problem does likelihood solve?\nLikelihood measures how well a model with fixed parameters explains the observed data.\nGiven a model and a dataset, likelihood answers the question: &gt; If the model parameters were correct, how plausible would the observed data be?\nImportantly, likelihood is not a probability over parameters, but a function of the parameters given the data.",
     "crumbs": [
       "Loss Functions",
       "Likelihood and Model Quality"
     ]
   },
   {
-    "objectID": "loss/likelihood.html#why-is-it-a-product-over-data-points",
-    "href": "loss/likelihood.html#why-is-it-a-product-over-data-points",
+    "objectID": "loss/likelihood.html#why-is-likelihood-a-product-over-data-points",
+    "href": "loss/likelihood.html#why-is-likelihood-a-product-over-data-points",
     "title": "Likelihood and Model Quality",
-    "section": "Why is it a product over data points?",
-    "text": "Why is it a product over data points?\nBecause we assume data points are independent. This means the joint probability factors into a product.",
+    "section": "Why is likelihood a product over data points?",
+    "text": "Why is likelihood a product over data points?\nIn most machine learning settings, we assume that training data points are independent and identically distributed (i.i.d.).\nUnder this assumption, the joint probability of the dataset factorizes into a product of per-sample probabilities. As a result, the likelihood over the dataset becomes a product over individual data points.\nThis factorization is a modeling assumption rather than a mathematical necessity.",
     "crumbs": [
       "Loss Functions",
       "Likelihood and Model Quality"
     ]
   },
   {
-    "objectID": "loss/likelihood.html#why-does-this-relate-to-loss-functions",
-    "href": "loss/likelihood.html#why-does-this-relate-to-loss-functions",
+    "objectID": "loss/likelihood.html#from-likelihood-to-log-likelihood",
+    "href": "loss/likelihood.html#from-likelihood-to-log-likelihood",
     "title": "Likelihood and Model Quality",
-    "section": "Why does this relate to loss functions?",
-    "text": "Why does this relate to loss functions?\nTaking the negative log-likelihood converts likelihood into a loss that can be minimized during training.",
+    "section": "From likelihood to log-likelihood",
+    "text": "From likelihood to log-likelihood\nMaximizing the likelihood directly can be numerically unstable, since it involves multiplying many small probabilities.\nTo address this, we maximize the log-likelihood instead. Because the logarithm is a monotonic function, maximizing the log-likelihood yields the same optimal parameters as maximizing the likelihood.\nIn addition, the log transform converts products into sums, which is more convenient for both analysis and optimization.",
+    "crumbs": [
+      "Loss Functions",
+      "Likelihood and Model Quality"
+    ]
+  },
+  {
+    "objectID": "loss/likelihood.html#from-log-likelihood-to-loss-minimization",
+    "href": "loss/likelihood.html#from-log-likelihood-to-loss-minimization",
+    "title": "Likelihood and Model Quality",
+    "section": "From log-likelihood to loss minimization",
+    "text": "From log-likelihood to loss minimization\nMachine learning optimization is typically framed as a minimization problem rather than a maximization problem.\nTherefore, instead of maximizing the log-likelihood, we minimize its negative. This leads to the definition of the negative log-likelihood (NLL).\nBy defining the loss function as the negative log-likelihood, training a model becomes equivalent to minimizing a loss function during optimization.",
+    "crumbs": [
+      "Loss Functions",
+      "Likelihood and Model Quality"
+    ]
+  },
+  {
+    "objectID": "loss/likelihood.html#least-squares-as-a-special-case",
+    "href": "loss/likelihood.html#least-squares-as-a-special-case",
+    "title": "Likelihood and Model Quality",
+    "section": "Least squares as a special case",
+    "text": "Least squares as a special case\nUnder the assumption that prediction errors follow a Gaussian distribution with fixed variance, the negative log-likelihood reduces to the familiar least squares loss.\nThis shows that commonly used loss functions are not arbitrary, but arise naturally from probabilistic modeling assumptions.\n(Details to be expanded.)",
     "crumbs": [
       "Loss Functions",
       "Likelihood and Model Quality"
@@ -56,6 +221,16 @@
     "title": "Deep Learning Notes",
     "section": "",
     "text": "These are my personal notes on deep learning, starting from loss functions and probabilistic modeling.\nThe goal is understanding assumptions and reasoning, not coverage.",
+    "crumbs": [
+      "Deep Learning Notes"
+    ]
+  },
+  {
+    "objectID": "index.html#writing-quarto-references",
+    "href": "index.html#writing-quarto-references",
+    "title": "Deep Learning Notes",
+    "section": "Writing & Quarto References",
+    "text": "Writing & Quarto References\nWhile writing these notes, I frequently refer to the following Quarto documentation:\n\nQuarto Markdown Basics\nQuarto Callouts (Notes, Warnings, Tips, etc.)",
     "crumbs": [
       "Deep Learning Notes"
     ]

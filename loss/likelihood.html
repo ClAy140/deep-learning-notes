@@ -156,12 +156,23 @@ window.Quarto = {
  <span class="menu-text">Likelihood and Model Quality</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
- <span class="menu-text">loss/mle-to-nll.qmd</span>
+      </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Neural Networks</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
- <span class="menu-text">loss/gaussian-to-mse.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../neural-networks/understanding-neural-networks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Neural Networks Are Not Black Boxes</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -192,17 +203,47 @@ window.Quarto = {
 </header>
 
 
+<section id="motivation-why-do-we-need-loss-functions" class="level2">
+<h2 class="anchored" data-anchor-id="motivation-why-do-we-need-loss-functions">Motivation: Why do we need loss functions?</h2>
+<p>When training neural networks, we always minimize a loss function. However, loss functions are often introduced as if they were arbitrary design choices.</p>
+<p>In this note, we explain where loss functions come from by starting with a probabilistic view of model quality, based on likelihood.</p>
+<p>This perspective will naturally lead us to negative log-likelihood and common loss functions such as least squares.</p>
+<hr>
+</section>
 <section id="what-problem-does-likelihood-solve" class="level2">
 <h2 class="anchored" data-anchor-id="what-problem-does-likelihood-solve">What problem does likelihood solve?</h2>
-<p>Likelihood measures how well a model with fixed parameters explains the observed data.</p>
+<p>Likelihood measures how well a model with <strong>fixed parameters</strong> explains the observed data.</p>
+<p>Given a model and a dataset, likelihood answers the question: &gt; If the model parameters were correct, how plausible would the observed data be?</p>
+<p>Importantly, likelihood is not a probability over parameters, but a function of the parameters given the data.</p>
+<hr>
 </section>
-<section id="why-is-it-a-product-over-data-points" class="level2">
-<h2 class="anchored" data-anchor-id="why-is-it-a-product-over-data-points">Why is it a product over data points?</h2>
-<p>Because we assume data points are independent. This means the joint probability factors into a product.</p>
+<section id="why-is-likelihood-a-product-over-data-points" class="level2">
+<h2 class="anchored" data-anchor-id="why-is-likelihood-a-product-over-data-points">Why is likelihood a product over data points?</h2>
+<p>In most machine learning settings, we assume that training data points are <strong>independent and identically distributed (i.i.d.)</strong>.</p>
+<p>Under this assumption, the joint probability of the dataset factorizes into a product of per-sample probabilities. As a result, the likelihood over the dataset becomes a product over individual data points.</p>
+<p>This factorization is a modeling assumption rather than a mathematical necessity.</p>
+<hr>
 </section>
-<section id="why-does-this-relate-to-loss-functions" class="level2">
-<h2 class="anchored" data-anchor-id="why-does-this-relate-to-loss-functions">Why does this relate to loss functions?</h2>
-<p>Taking the negative log-likelihood converts likelihood into a loss that can be minimized during training.</p>
+<section id="from-likelihood-to-log-likelihood" class="level2">
+<h2 class="anchored" data-anchor-id="from-likelihood-to-log-likelihood">From likelihood to log-likelihood</h2>
+<p>Maximizing the likelihood directly can be numerically unstable, since it involves multiplying many small probabilities.</p>
+<p>To address this, we maximize the <strong>log-likelihood</strong> instead. Because the logarithm is a monotonic function, maximizing the log-likelihood yields the same optimal parameters as maximizing the likelihood.</p>
+<p>In addition, the log transform converts products into sums, which is more convenient for both analysis and optimization.</p>
+<hr>
+</section>
+<section id="from-log-likelihood-to-loss-minimization" class="level2">
+<h2 class="anchored" data-anchor-id="from-log-likelihood-to-loss-minimization">From log-likelihood to loss minimization</h2>
+<p>Machine learning optimization is typically framed as a <strong>minimization</strong> problem rather than a maximization problem.</p>
+<p>Therefore, instead of maximizing the log-likelihood, we minimize its negative. This leads to the definition of the <strong>negative log-likelihood (NLL)</strong>.</p>
+<p>By defining the loss function as the negative log-likelihood, training a model becomes equivalent to minimizing a loss function during optimization.</p>
+<hr>
+</section>
+<section id="least-squares-as-a-special-case" class="level2">
+<h2 class="anchored" data-anchor-id="least-squares-as-a-special-case">Least squares as a special case</h2>
+<p>Under the assumption that prediction errors follow a Gaussian distribution with fixed variance, the negative log-likelihood reduces to the familiar least squares loss.</p>
+<p>This shows that commonly used loss functions are not arbitrary, but arise naturally from probabilistic modeling assumptions.</p>
+<p>(Details to be expanded.)</p>
+<hr>
 
 
 
