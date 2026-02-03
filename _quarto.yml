@@ -14,6 +14,7 @@ website:
       - section: "Neural Networks"
         contents:
           - neural-networks/understanding-neural-networks.qmd
+          - neural-networks/deep-neural-networks.qmd
 
 format:
   html:

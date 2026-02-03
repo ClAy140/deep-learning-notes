@@ -1,0 +1,137 @@
+---
+title: "Deep Neural Networks: Why Depth Matters"
+jupyter: python3
+format:
+  html:
+    code-fold: true
+    code-summary: "Show code"
+    toc: true
+    toc-depth: 3
+    number-sections: true
+---
+
+## Motivation: Shallow is *Theoretically* Sufficient, but *Practically* Prohibitive
+
+According to the **Universal Approximation Theorem**, a **shallow network** (one hidden layer) can approximate any continuous function to arbitrary precision, provided it has enough—potentially infinite—hidden units.
+
+::: {.callout-note}
+**Theoretical Conclusion:** Anything a deep network can do, a shallow network can theoretically replicate.  
+**Practical Reality:** "Theoretically possible" does not mean "Trainable, Implementable, or Generalizable."
+:::
+
+So why do we use **Deep Neural Networks**?
+
+### Efficiency as Capability
+
+Theoretical equivalence does not imply practical feasibility. For complex tasks like computer vision or natural language processing, the efficiency gap is so vast that it turns "possibility" into "impossibility."
+
+- **Parameter Explosion** To mimic the representational power of a 50-layer deep network, a shallow network might require an exponential number of hidden units (e.g., $2^{50}$). This exceeds the physical memory and computational limits of any modern hardware.
+
+- **Data Efficiency & Inductive Bias** Deep networks utilize a **compositional prior**. The natural world is hierarchical: pixels $\to$ edges $\to$ textures $\to$ objects. Deep models reuse intermediate features across different categories, whereas shallow models attempt to "memorize" every global pattern flatly, requiring astronomical amounts of training data.
+
+### Optimization Trajectory
+
+The structure of a model dictates how easily it can be trained.
+
+- **Loss Landscapes:** Shallow, ultra-wide networks often result in unstable loss landscapes where finding an optimal global solution is computationally difficult.
+- **Progressive Learning:** While deep networks face vanishing/exploding gradients, techniques like **Residual Connections (ResNet)** and **Normalization** allow them to learn features incrementally, which is much more stable in practice.
+
+---
+
+## What is a Deep Neural Network?
+
+While a shallow network represents a function as a single expansion, a deep network is a **recursive construction of representations**:
+
+- **Shallow (One hidden layer):**
+  $$y = \sum_{i=1}^H \phi_i \cdot \sigma(w_i^\top x + b_i) + \phi_0$$
+
+- **Deep (L hidden layers):**
+  $$h^{(1)} = \sigma(W^{(1)}x + b^{(1)})$$
+  $$h^{(\ell)} = \sigma(W^{(\ell)}h^{(\ell-1)} + b^{(\ell)})$$
+  $$y = W^{(L+1)}h^{(L)} + b^{(L+1)}$$
+
+::: {.callout-note}
+**Key Distinction:** Depth is not just about adding more basis functions; it is about **modeling the intermediate representations themselves**.
+:::
+
+---
+
+## The Folding Intuition: Space Transformation
+
+The "Folding" metaphor describes how ReLU networks partition the input space.
+
+
+
+### ReLU and Piecewise Linearity
+
+For a ReLU activation $\text{ReLU}(z) = \max(0, z)$:
+- Each unit acts as a "hinge," splitting the space into active and inactive regions.
+- Within each region, the network remains linear. Collectively, the network is **piecewise linear**.
+
+### Depth as Iterative Folding
+
+The magic happens because **layer $\ell+1$ does not slice the original input space; it slices the already folded space provided by layer $\ell$.**
+
+1. **Layer 1:** Creates initial "folds" (linear regions).
+2. **Layer 2:** Folds the paper *again* on top of the first folds.
+3. **Layer L:** By compounding these operations, the number of linear regions grows **exponentially** ($O(2^L)$) rather than linearly ($O(L)$).
+
+
+
+---
+
+## Visualization: The ReLU "Kink"
+
+This code visualizes how a single ReLU unit introduces a non-linear "fold" in a 1D space.
+
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.linspace(-5, 5, 400)
+y = np.maximum(0, x)
+
+plt.figure(figsize=(8, 4))
+plt.plot(x, y, label='ReLU(x)', color='blue')
+plt.axvline(0, color='red', linestyle='--', label='Hinge Point (Fold)')
+plt.title("The Fundamental 'Fold' of a ReLU Unit")
+plt.xlabel("Input (x)")
+plt.ylabel("Output")
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+```
+
+***
+
+Note on Output Layers: 
+
+- Why don't we have activation function in the output layer
+
+  - We generally omit non-linear activations in the final output layer to ensure:
+
+    - Unbounded Prediction: No clipping of values (especially for regression).
+
+    - Numerical Stability: Better integration with loss functions (Logits).
+
+    - Linear Mapping: Using the features extracted by deep hidden layers to compute the final result linearly.
+
+Why Depth? 
+
+- Beyond parameter efficiency, depth enables **Automatic Feature Hierarchies**, **Invariance** to input transformations, and the possibility of **Transfer Learning**, making it the superior architecture for complex real-world data like vision and language.
+
+Fully connected network
+
+## Fitting and Generalization (Lecture Page 48)
+
+在实际训练中，深度网络表现出独特的性能曲线：
+
+### Fitting (拟合)
+* **20层分水岭：** 在大约 20 层以内，深度模型的拟合（让训练误差下降）通常比浅层模型更容易。
+* **Vanilla Form 的限制：** 在“基础形式”下，超过 20 层后由于梯度消失或爆炸问题，拟合变得更加困难，需要引入 **Residual Connections** 等技巧。
+
+### Generalization (泛化)
+* **为什么深度网络泛化更好？**
+    * **Hierarchical Structure：** 深度网络强制执行层级化特征提取（从边缘到物体），这符合现实世界的物理规律。
+    * **Invariance：** 深度结构通过层层抽象，对输入数据的平移和旋转具有更强的鲁棒性。

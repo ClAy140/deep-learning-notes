@@ -7,36 +7,69 @@ title: "Likelihood and Model Quality"
 When training neural networks, we always minimize a loss function.
 However, loss functions are often introduced as if they were arbitrary design choices.
 
-In this note, we explain where loss functions come from by starting with a probabilistic view of model quality, based on likelihood.
+In this note, we explain where loss functions come from by starting with a probabilistic view of model quality based on likelihood.
 
-This perspective will naturally lead us to negative log-likelihood and common loss functions such as least squares.
+This perspective naturally leads to negative log-likelihood and to common loss functions such as least squares.
 
----
+
+::: {.callout-note}
+Loss function不是随意设计的，而是来源于通过统计视角evaluate模型质量。
+:::
 
 ## What problem does likelihood solve?
-
-
-
 
 Likelihood measures how well a model with **fixed parameters** explains the observed data.
 
 Given a model and a dataset, likelihood answers the question:
+
 > If the model parameters were correct, how plausible would the observed data be?
 
-Importantly, likelihood is not a probability over parameters, but a function of the parameters given the data.
+Formally, let $D = \{x_1, \dots, x_n\}$ be the observed data and $\theta$ the model parameters.
+The likelihood is defined as:
 
----
+$$
+\mathcal{L}(\theta \mid D)
+= p(D \mid \theta)
+$$
+
+If the data points are assumed to be independent, this factorizes as:
+
+$$
+\mathcal{L}(\theta \mid D)
+= \prod_{i=1}^{n} p(x_i \mid \theta)
+$$
+
+In practice, we usually work with the log-likelihood:
+
+$$
+\log \mathcal{L}(\theta \mid D)
+= \sum_{i=1}^{n} \log p(x_i \mid \theta)
+$$
+
+Importantly, likelihood is not a probability distribution over parameters.
+It is a function of the parameters, with the observed data held fixed.
+
+::: {.callout-note}
+Likelihood measure的是在given data and parameters的情况下，模型对数据解释程度的好坏。Likelihood 高意味着大多数 data points 落在 model 的 high-probability regions，从而说明模型对数据的解释能力较强。
+:::
 
 ## Why is likelihood a product over data points?
 
 In most machine learning settings, we assume that training data points are **independent and identically distributed (i.i.d.)**.
 
-Under this assumption, the joint probability of the dataset factorizes into a product of per-sample probabilities.
+Under this assumption, the joint probability of the dataset factorizes into a product of per-sample probabilities:
+
+$$
+p(D \mid \theta)
+= \prod_{i=1}^{n} p(x_i \mid \theta)
+$$
+
 As a result, the likelihood over the dataset becomes a product over individual data points.
 
 This factorization is a modeling assumption rather than a mathematical necessity.
+If the data were dependent, the likelihood would take a different form.
 
----
+
 
 ## From likelihood to log-likelihood
 
@@ -45,27 +78,52 @@ Maximizing the likelihood directly can be numerically unstable, since it involve
 To address this, we maximize the **log-likelihood** instead.
 Because the logarithm is a monotonic function, maximizing the log-likelihood yields the same optimal parameters as maximizing the likelihood.
 
-In addition, the log transform converts products into sums, which is more convenient for both analysis and optimization.
+In addition, the log transform converts products into sums, which simplifies both analysis and optimization:
 
----
+$$
+\arg\max_{\theta} \mathcal{L}(\theta \mid D)
+\quad \Longleftrightarrow \quad
+\arg\max_{\theta} \log \mathcal{L}(\theta \mid D)
+$$
+
+::: {.callout-note}
+log-likelihood在数值上更稳定，并将乘积结构转化为更易优化的求和形式。
+:::
 
 ## From log-likelihood to loss minimization
 
 Machine learning optimization is typically framed as a **minimization** problem rather than a maximization problem.
 
 Therefore, instead of maximizing the log-likelihood, we minimize its negative.
-This leads to the definition of the **negative log-likelihood (NLL)**.
+This leads to the **negative log-likelihood (NLL)**:
 
-By defining the loss function as the negative log-likelihood, training a model becomes equivalent to minimizing a loss function during optimization.
+$$
+\mathrm{NLL}(\theta)
+= - \log \mathcal{L}(\theta \mid D)
+$$
 
----
+By defining the loss function as the negative log-likelihood, training a model becomes equivalent to fitting a probabilistic model to data under a chosen distributional assumption.
+
+::: {.callout-note}
+通过最小化negative log-likelihood，可以将概率建模问题转化为标准的损失最小化问题。
+:::
 
 ## Least squares as a special case
 
-Under the assumption that prediction errors follow a Gaussian distribution with fixed variance, the negative log-likelihood reduces to the familiar least squares loss.
+Assume that the model predicts a mean $f_\theta(x)$, and that the target values are corrupted by Gaussian noise with fixed variance $\sigma^2$:
 
-This shows that commonly used loss functions are not arbitrary, but arise naturally from probabilistic modeling assumptions.
+$$
+y \mid x, \theta \sim \mathcal{N}(f_\theta(x), \sigma^2)
+$$
 
-(Details to be expanded.)
+Under this assumption, the negative log-likelihood is proportional to the sum of squared errors:
 
----
+$$
+\mathrm{NLL}(\theta)
+\propto \sum_{i=1}^{n} \bigl(y_i - f_\theta(x_i)\bigr)^2
+$$
+
+Thus, the familiar least squares loss arises naturally from a Gaussian noise model.
+
+This shows that commonly used loss functions are not arbitrary,
+but are consequences of explicit probabilistic modeling assumptions.
